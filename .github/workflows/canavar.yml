@@ -4,19 +4,23 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Canavari Hazirla
+    - name: VNC ve Sistem Hazirligi
       run: |
-        Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
-        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-        net user Ahmet Canavar123! /add
-        net localgroup administrators Ahmet /add
-    - name: Ngrok Otomatik Tunel
+        echo "Canavar uyaniyor..."
+        choco install tightvnc -y
+        # VNC Sifresini "Canavar" (6-8 karakter) yapiyoruz
+        $vncPath = "C:\Program Files\TightVNC\tvnserver.exe"
+        Start-Process $vncPath -ArgumentList "-install" -Wait
+        Start-Process $vncPath -ArgumentList "-start"
+        # Sifreyi kayit defterine gomelim (Canavar!)
+        reg add "HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server" /v "Password" /t REG_BINARY /d 3230323032303230 /f
+    - name: Ngrok ile VNC Tuneli
       run: |
-        curl -L -o ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip
+        Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
         Expand-Archive ngrok.zip -DestinationPath .
         .\ngrok.exe authtoken 379ibLsayz85cS19FIgzDzGJbTH_6a8XaXE14Q2L7bYtDaGm5
-        Start-Process .\ngrok.exe -ArgumentList "tcp 3389"
-    - name: Tmate Baglantisi
+        Start-Process .\ngrok.exe -ArgumentList "tcp 5900"
+    - name: Bekleme Modu
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: false
