@@ -6,7 +6,6 @@ jobs:
     steps:
     - name: Tiny11 Windows Hazirlik
       run: |
-        echo "Canavar uyaniyor... Tiny11 kuruluyor..."
         Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         net user Ahmet Canavar123! /add
@@ -15,6 +14,5 @@ jobs:
       run: |
         curl -L -o ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip
         Expand-Archive ngrok.zip
-        .\ngrok.exe authtoken TOKEN_BURAYA
-        echo "Adresiniz birazdan altta cikacak..."
-        .\ngrok.exe tcp 3389
+        .\ngrok\ngrok.exe authtoken 379ibLsayz85cS19FIgzDzGJbTH_6a8XaXE14Q2L7bYtDaGm5
+        .\ngrok\ngrok.exe tcp 3389
