@@ -4,13 +4,13 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: VNC Sunucusunu Hazirla
+    - name: VNC Sunucusunu Kur
       run: |
         choco install tightvnc -y
         $vncPath = "C:\Program Files\TightVNC\tvnserver.exe"
         Start-Process $vncPath -ArgumentList "-install" -Wait
         Start-Process $vncPath -ArgumentList "-start"
-    - name: Canavara Baglan
+    - name: Tmate ile Kapiyi Ac
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: false
