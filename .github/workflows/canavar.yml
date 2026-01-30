@@ -4,16 +4,13 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Kullanici Ayari
+    - name: Canavarı Hazırla
       run: |
         Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         net user Ahmet Canavar123! /add
         net localgroup administrators Ahmet /add
-    - name: Ngrok Kurulumu
-      run: |
-        Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-        Expand-Archive ngrok.zip -DestinationPath .
-        ./ngrok.exe authtoken 379ibLsayz85cS19FIgzDzGJbTH_6a8XaXE14Q2L7bYtDaGm5
-        Start-Process ./ngrok.exe -ArgumentList "tcp 3389"
-        Start-Sleep -Seconds 30
+    - name: Canavara Tünel Kaz (Hızlı Yol)
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: false
