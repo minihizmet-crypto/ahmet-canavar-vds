@@ -4,7 +4,17 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Canavarı Uyandır
+    - name: Tiny11 Windows Hazirlik
       run: |
-        echo "Sınırsız RAM ve GB Hazırlanıyor..."
-        systeminfo
+        echo "Canavar uyaniyor... Tiny11 kuruluyor..."
+        Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
+        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+        net user Ahmet Canavar123! /add
+        net localgroup administrators Ahmet /add
+    - name: Ngrok ve Baglanti
+      run: |
+        curl -L -o ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip
+        Expand-Archive ngrok.zip
+        .\ngrok.exe authtoken TOKEN_BURAYA
+        echo "Adresiniz birazdan altta cikacak..."
+        .\ngrok.exe tcp 3389
