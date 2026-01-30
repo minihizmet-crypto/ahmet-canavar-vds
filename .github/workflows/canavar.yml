@@ -4,23 +4,13 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: VNC ve Sistem Hazirligi
+    - name: VNC Sunucusunu Hazirla
       run: |
-        echo "Canavar uyaniyor..."
         choco install tightvnc -y
-        # VNC Sifresini "Canavar" (6-8 karakter) yapiyoruz
         $vncPath = "C:\Program Files\TightVNC\tvnserver.exe"
         Start-Process $vncPath -ArgumentList "-install" -Wait
         Start-Process $vncPath -ArgumentList "-start"
-        # Sifreyi kayit defterine gomelim (Canavar!)
-        reg add "HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server" /v "Password" /t REG_BINARY /d 3230323032303230 /f
-    - name: Ngrok ile VNC Tuneli
-      run: |
-        Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-        Expand-Archive ngrok.zip -DestinationPath .
-        .\ngrok.exe authtoken 379ibLsayz85cS19FIgzDzGJbTH_6a8XaXE14Q2L7bYtDaGm5
-        Start-Process .\ngrok.exe -ArgumentList "tcp 5900"
-    - name: Bekleme Modu
+    - name: Canavara Baglan
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: false
